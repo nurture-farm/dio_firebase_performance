@@ -23,8 +23,10 @@ class DioFirebasePerformanceInterceptor extends Interceptor {
   final ResponseContentLengthMethod responseContentLengthMethod;
 
   @override
-  Future onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     try {
       final metric = FirebasePerformance.instance.newHttpMetric(
           options.uri.normalized(), options.method.asHttpMethod()!);
@@ -41,8 +43,10 @@ class DioFirebasePerformanceInterceptor extends Interceptor {
   }
 
   @override
-  Future onResponse(
-      Response response, ResponseInterceptorHandler handler) async {
+  void onResponse(
+    Response response,
+    ResponseInterceptorHandler handler,
+  ) async {
     try {
       final requestKey = response.requestOptions.extra.hashCode;
       final metric = _map[requestKey];
@@ -54,7 +58,10 @@ class DioFirebasePerformanceInterceptor extends Interceptor {
   }
 
   @override
-  Future onError(DioError err, ErrorInterceptorHandler handler) async {
+  void onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
     try {
       final requestKey = err.requestOptions.extra.hashCode;
       final metric = _map[requestKey];
